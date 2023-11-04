@@ -1,6 +1,60 @@
-# nnUNet for Medulloblastoma Segmentation
+# Artificial Intelligence Analysis on Medulloblastoma
 
-## Quick Start
+- Data Preprocessing
+- Tumor Segmentation
+- Feature Extraction, Selection and Classification
+## Data Preprocessing for Segmentation and Feature Extraction
+#### Data Preprocessing for nnUNet Segmentation
+- Convert DICOM to NIFTI
+  ```python
+  !pip install dicom2nifti
+  import dicom2nifti
+  dicom2nifti.dicom_series_to_nifti(original_dicom_directory, output_file, reorient_nifti=True)
+  ```
+- Registration (Unify origins, directions, and spacing among different modalities, if needed)
+  ```python
+  !pip install antspyx
+  import ants
+  _ = ants.registration(fixed=fix_img, moving=move_img, type_of_transform='SyN')
+  ```
+- Other Preprocessing Methods (e.g. skull-stripping, intensity normalization, etc.)
+#### Data Preprocessing for feature extraction (based on preprocessing for nnUNet)
+- Resampling (Resample to the same resolution)
+  ```python
+  !pip install SimpleITK
+  import SimpleITK as sitk
+  resample = sitk.ResampleImageFilter()
+  resample.SetInterpolator(sitk.sitkLinear)
+  resample.SetOutputDirection(image.GetDirection())
+  resample.SetOutputOrigin(image.GetOrigin())
+  resample.SetOutputSpacing([0.429, 0.429, 6.5]) # the most resolution of the dataset
+  resample.SetSize([origin_x/0.429*origin_spacing[0], origin_y/0.429*origin_spacing[1], origin_z/6.5*origin_spacing[2]])
+  image = resample.Execute(image)
+  ```
+- N4Bias field correction
+  ```python
+   import ants
+   modality_data = ants.n4_bias_field_correction(modality_data)
+  ```
+- Skull-stripping (Please refer to [ROBEX](https://www.nitrc.org/projects/robex).)
+- Denoise images using non-local means filter
+  ```python
+  import ants
+  modality_data = ants.from_numpy(modality_data)
+  modality_data = ants.denoise_image(modality_data, ants.get_mask(modality_data))
+  modality_data = modality_data.numpy()
+  ```
+- Intensity normalization
+  ```python
+  !pip install intensity-normalization
+  from intensity_normalization.normalize.zscore import ZScoreNormalize
+  z_norm = ZScoreNormalize()
+  modality_data = z_norm(modality_data, brain)
+  ```
+- Other Preprocessing Methods (e.g. histogram, etc.)
+## nnUNet for Medulloblastoma Segmentation
+
+### Quick Start
 
 For inference based on trained model
 
@@ -69,7 +123,7 @@ For inference based on trained model
 
 ​ The parameter `504` is th ID of our experiment.
 
-## Training and Testing Pipeline
+### Training and Testing Pipeline
 
 #### Dataset and Experiment preparation
 
