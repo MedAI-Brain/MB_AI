@@ -3,8 +3,11 @@
 - Data Preprocessing
 - Tumor Segmentation
 - Feature Extraction, Selection and Classification
+
 ## Data Preprocessing for Segmentation and Feature Extraction
+
 #### Data Preprocessing for nnUNet Segmentation
+
 - Convert DICOM to NIFTI
   ```python
   !pip install dicom2nifti
@@ -18,7 +21,9 @@
   _ = ants.registration(fixed=fix_img, moving=move_img, type_of_transform='SyN')
   ```
 - Other Preprocessing Methods (e.g. skull-stripping, intensity normalization, etc.)
+
 #### Data Preprocessing for feature extraction (based on preprocessing for nnUNet)
+
 - Resampling (Resample to the same resolution)
   ```python
   !pip install SimpleITK
@@ -52,6 +57,7 @@
   modality_data = z_norm(modality_data, brain)
   ```
 - Other Preprocessing Methods (e.g. histogram, etc.)
+
 ## nnUNet for Medulloblastoma Segmentation
 
 ### Quick Start
@@ -73,12 +79,12 @@ For inference based on trained model
   Create `nnUNet_workdir` and three subfolders, please read the documentation
   of [nnUNetv1](https://github.com/MIC-DKFZ/nnUNet/tree/nnunetv1) for details. If you only want to test the model, you
   needn't create any files or folds under `nnUNet_raw_data` and `nnUNet_preprocessed`. We provide `RESULTS_FOLDER` which
-  contains trained model's checkpoints.
+  contains trained model's checkpoints. Please download it via [this link](https://drive.google.com/file/d/142uy70tN3I2K5Erg0BOUPDgvJOasXlwk/view?usp=drive_link) and unzip it under `nnUNet_workdir`.
 
   ```shell
   nnUNetData
   	|__  nnUNet_raw_data
-  	|  |__  Task504_NativeTumor
+  	|  |__  Task505_MedoTumor
   	|    |__  imagesTr
   	|    |__  imagesTs(optional)
   	|    |__  labelsTr
@@ -118,10 +124,10 @@ For inference based on trained model
   We use the `3d_fullres` architecture of nnUNet. It is a 3d convolution network.
 
   ```shell
-  nnUNet_predict -i [PATH OF TEST DATASET] -o [OUTPUT PATH] -t 504 -m 3d_fullres
+  nnUNet_predict -i [PATH OF TEST DATASET] -o [OUTPUT PATH] -t 505 -m 3d_fullres
   ```
 
-​ The parameter `504` is th ID of our experiment.
+​ The parameter `505` is th ID of our experiment.
 
 ### Training and Testing Pipeline
 
