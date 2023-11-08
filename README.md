@@ -166,3 +166,39 @@ nnUNet_predict -i [PATH OF TEST DATASET] -o [OUTPUT PATH] -tr nnUNetTrainerV2 -c
 ```
 
 Please notice that you don't have to make `dataset.json` for testing dataset.
+
+## Feature Extraction, Selection and Classification
+
+#### Feature Extraction
+```python
+!pip install pyradiomics
+import radiomics
+feature_extractor = radiomics.featureextractor.RadiomicsFeatureExtractor()
+feature_vector_intra = feature_extractor.execute(image, intra_mask)
+feature_vector_peri = feature_extractor.execute(image, peri_mask)
+```
+
+#### Feature Selection
+- Random forest
+  ```python
+  import numpy as np
+  from sklearn.ensemble import RandomForestClassifier
+  rfc = RandomForestClassifier(n_estimators=1500)
+  feature_importance = rfc.fit(data, label).feature_importances_
+  sort_ind = np.argsort(feature_importance,)[::-1]
+  reduce_col = [data.columns[sort_ind[i]] for i in range(feature_num)]
+  data = data.loc[:,reduce_col]
+  ```
+- AUC score between feature and label
+  ```python
+  import numpy as np
+  from sklearn.metrics import roc_auc_score
+  auc_score = []
+  for i in range(feature_num):
+      auc_score.append(roc_auc_score(label, data.iloc[:,i]))
+  # in most cases, the larger the abs(auc_score-0.5), the more important the feature
+  sort_ind = ***
+  reduce_col = [data.columns[sort_ind[i]] for i in range(feature_num)]
+  data = data.loc[:,reduce_col]
+  ```
+- Other methods like LASSO, etc.
