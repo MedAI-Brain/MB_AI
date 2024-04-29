@@ -79,7 +79,8 @@ For inference based on trained model
   Create `nnUNet_workdir` and three subfolders, please read the documentation
   of [nnUNetv1](https://github.com/MIC-DKFZ/nnUNet/tree/nnunetv1) for details. If you only want to test the model, you
   needn't create any files or folds under `nnUNet_raw_data` and `nnUNet_preprocessed`. We provide `RESULTS_FOLDER` which
-  contains trained model's checkpoints. Please download it via [this link](https://drive.google.com/file/d/142uy70tN3I2K5Erg0BOUPDgvJOasXlwk/view?usp=drive_link) and unzip it under `nnUNet_workdir`.
+  contains trained model's checkpoints. In our [colab notebook](https://colab.research.google.com/drive/1FoBDfPAeU_PH22VQyn-vrUED_bHM5Vpc?usp=sharing![image](https://github.com/MedAI-Brain/MB_AI/assets/148333553/2a2fa14f-ab6b-4e82-9c77-8059da06ee77)
+), we provide the download link and method in the notebook, you can download `RESULTS_FOLDER` either to your desktop or just to google drive.
 
   ```shell
   nnUNetData
